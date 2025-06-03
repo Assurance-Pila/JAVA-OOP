@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.staffmanagementsystem.controller.DashboardController" style="-fx-background-color: #f5f5f5;" stylesheets="@/styles.css">
+    <top>
+        <HBox alignment="CENTER" style="-fx-background-color: #2c3e50; -fx-padding: 10px;">
+            <Button fx:id="toggleDrawerButton" text="☰" onAction="#toggleDrawer" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 18px;"/>
+            <Label text="Staff Management System" textFill="WHITE" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 0 10px;"/>
+        </HBox>
+    </top>
+    <left>
+        <JFXDrawer fx:id="drawer" style="-fx-background-color: #34495e;">
+            <sidePane>
+                <fx:include source="/drawer.fxml" />
+            </sidePane>
+        </JFXDrawer>
+    </left>
+    <center>
+        <VBox fx:id="contentArea" alignment="CENTER" spacing="20" style="-fx-padding: 20px;">
+            <Label fx:id="welcomeLabel" style="-fx-font-size: 16px; -fx-text-fill: #2c3e50;"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Role:" style="-fx-text-fill: #2c3e50;"/>
+                <Label fx:id="roleLabel" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            </HBox>
+            <Label text="Select a feature from the drawer" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;"/>
+        </VBox>
+    </center>
+</BorderPane>

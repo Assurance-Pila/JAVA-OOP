@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:id="drawerContent" style="-fx-background-color: #34495e; -fx-padding: 10px;">
+    <children>
+        <Label text="Navigation" textFill="WHITE" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px 0;"/>
+        <Button text="\\uf073  View Schedule" onAction="#showViewSchedule" style="-fx-text-fill: white; -fx-padding: 10px; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="\\uf007  Mark Attendance" onAction="#showMarkAttendance" style="-fx-text-fill: white; -fx-padding: 10px; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="\\uf0c6  Upload Report" onAction="#showUploadReport" style="-fx-text-fill: white; -fx-padding: 10px; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="\\uf02d  View Payroll" onAction="#showViewPayroll" style="-fx-text-fill: white; -fx-padding: 10px; -fx-background-color: transparent; -fx-cursor: hand;"/>
+        <Button text="\\uf08b  Logout" onAction="#handleLogout" style="-fx-text-fill: white; -fx-padding: 10px; -fx-background-color: transparent; -fx-cursor: hand;"/>
+    </children>
+</VBox>

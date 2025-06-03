@@ -1,0 +1,17 @@
+@font-face {
+    font-family: "FontAwesome";
+    src: url("fonts/fontawesome-webfont.ttf");
+}
+
+.root {
+    -fx-font-family: "FontAwesome";
+}
+
+.button {
+    -fx-font-family: "FontAwesome", "Arial"; /* Fallback to Arial for regular text */
+    -fx-font-size: 14px;
+}
+
+.button .text {
+    -fx-font-family: "FontAwesome", "Arial";
+}
