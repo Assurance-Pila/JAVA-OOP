@@ -1,77 +1,96 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { Form, Button, Container, Row, Col, Alert, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
-const API_BASE_URL = 'http://localhost:8080/api';
 
-function Login({ onLogin }) {
+const Login = () => {
+  const { login } = useAuth();
+
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      const response = await axios.post(`${API_BASE_URL}/users/login`, formData);
-      if (response.data.success) {
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        // onLogin(response.data.user);
-        setMessage('Login successful!');
+    const { success, user } = await login({ email, username, password, role });
+    if (!success) {
+      setError('Invalid credentials. Please try again.');
+    } else {
+      setError('');
+
+      // Redirect based on role
+      if (user?.role === 'manager') {
+        navigate('/manager/dashboard');
+      } else if (user?.role === 'employee') {
+        navigate('/employee/dashboard');
+      } else if (user?.role === 'hr') {
+        navigate('/hr/dashboard');
+      } else {
         navigate('/dashboard');
       }
-    } catch (error) {
-      setMessage(error.response?.data?.message || 'Login failed');
     }
-    setIsLoading(false);
   };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: '400px' }}>
-      <h2 className="text-center mb-4">Login</h2>
-      {message && <div className={`message ${message.includes('successful') ? 'success' : 'error'}`}>{message}</div>}
-      <form onSubmit={handleLogin}>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email address</label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            required
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
+    <Container fluid className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <Card className="p-4 shadow" style={{ width: '400px' }}>
+        <h2 className="text-center mb-4">Login</h2>
+        {error && <Alert variant="danger">{error}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formEmail" className="mb-3">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Form.Group>
 
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            required
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
+          <Form.Group controlId="formUsername" className="mb-3">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </Form.Group>
 
-        <button type="submit" className="btn btn-primary w-100">Login</button>
-      </form>
-    </div>
+          <Form.Group controlId="formPassword" className="mb-3">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formRole" className="mb-4">
+            <Form.Label>Select Role</Form.Label>
+            <Form.Select value={role} onChange={(e) => setRole(e.target.value)} required>
+              <option value="">-- Select Role --</option>
+              <option value="manager">Manager</option>
+              <option value="employee">Employee</option>
+              <option value="hr">HR</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Button variant="primary" type="submit" className="w-100">
+            Login
+          </Button>
+        </Form>
+      </Card>
+    </Container>
   );
-}
+};
 
 export default Login;

@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -11,6 +12,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Load user from localStorage on startup
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
@@ -19,24 +21,28 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = async (username, password) => {
+  // ✅ Updated login to accept email, username, password, role
+  const login = async ({ email, username, password, role }) => {
     try {
       const response = await axios.post('http://localhost:8080/api/auth/signin', {
+        email,
         username,
-        password
+        password,
+        role
       });
+
       const userData = response.data;
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
-      return { success: true };
+
+      return { success: true, user: userData };
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || 'Login failed'
-      };
+      console.error('Login failed:', error.response?.data || error.message);
+      return { success: false };
     }
   };
 
+  // Registration function
   const register = async (userData) => {
     try {
       await axios.post('http://localhost:8080/api/auth/signup', userData);
@@ -49,6 +55,7 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Logout
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
@@ -56,6 +63,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     user,
+    isAuthenticated: !!user,
     login,
     register,
     logout,
